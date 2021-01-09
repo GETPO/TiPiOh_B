@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, StyleSheet, Image, Text, TextInput, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import * as firebase from 'firebase';
+import FirebaseError from "./FirebaseError";
 
 export default class Login extends React.Component {
     state = { email: '', password: '', errorMessage: null }
@@ -12,7 +13,7 @@ export default class Login extends React.Component {
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(() => this.props.navigation.dispatch(resetAction))
-            .catch(error => this.setState({ errorMessage: error.message }))
+            .catch(error => this.setState({ errorMessage: FirebaseError(error.code) }))
     }
 
     render() {
