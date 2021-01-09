@@ -5,16 +5,29 @@ import * as Font from 'expo-font';
 import { StyleSheet, Text, TouchableOpacity} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import * as firebase from 'firebase';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCKaZbEYYPVrvB_IOwbFhFka3RIY3fth2U",
+  authDomain: "tipiohapp.firebaseapp.com",
+  projectId: "tipiohapp",
+  storageBucket: "tipiohapp.appspot.com",
+  messagingSenderId: "107612330964",
+  appId: "1:107612330964:web:49d73e7b0034bfd87cd441",
+  measurementId: "G-NLX5BKB1QM"
+};
 
 const Stack = createStackNavigator();
 
 export default class App extends React.Component {
+
   state = {
     loading: true
   };
 
   async componentDidMount(){
+    firebase.initializeApp(firebaseConfig);
+
     await Font.loadAsync({
       'DancingScript': require('./assets/fonts/DancingScript-Bold.ttf'),
     });
@@ -61,7 +74,7 @@ export default class App extends React.Component {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      );  
+      );
     }
   }
 }
