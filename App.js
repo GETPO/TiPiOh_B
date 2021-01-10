@@ -1,10 +1,13 @@
 import React from 'react';
 import Login from "./Login";
+import RegisterEmail from "./Register/RegisterEmail";
+import RegisterPassword from "./Register/RegisterPassword";
 import Tab from "./Tab";
 import * as Font from 'expo-font';
-import { StyleSheet, Text, TouchableOpacity} from 'react-native';
+import { Text, TouchableOpacity} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { navigationRef } from './RootNavigation';
 import * as firebase from 'firebase';
 
 const firebaseConfig = {
@@ -27,7 +30,6 @@ export default class App extends React.Component {
 
   async componentDidMount(){
     firebase.initializeApp(firebaseConfig);
-
     await Font.loadAsync({
       'DancingScript': require('./assets/fonts/DancingScript-Bold.ttf'),
     });
@@ -41,7 +43,7 @@ export default class App extends React.Component {
     }
     else{
       return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           <Stack.Navigator initialRouteName="Login"
           headerMode="screen"
           gestureEnabled="true"
@@ -56,21 +58,58 @@ export default class App extends React.Component {
               fontSize: 30
             },
             headerTitle: "TiPiOh",
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => alert('Right Menu Clicked')}
-                style={{marginRight: 10}}>
-                <Text style={{color: 'white'}}>Right Menu</Text>
-              </TouchableOpacity>
-            ),
           }}>
             <Stack.Screen
               name="Login"
               component={Login}
+              options={{
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => alert('김우석 & 김성원')}
+                    style={{marginRight: 10}}>
+                    <Text style={{color: 'white'}}>개발자</Text>
+                  </TouchableOpacity>
+                ),
+              }}
             />
             <Stack.Screen
               name="Tab"
               component={Tab}
+              options={{
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => alert('right Menu Clicked')}
+                    style={{marginRight: 10}}>
+                    <Text style={{color: 'white'}}>right Menu</Text>
+                  </TouchableOpacity>
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="RegisterEmail"
+              component={RegisterEmail}
+              options={{
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => navigationRef.current.navigate("RegisterPassword")}
+                    style={{marginRight: 10}}>
+                    <Text style={{color: 'white'}}>다음</Text>
+                  </TouchableOpacity>
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="RegisterPassword"
+              component={RegisterPassword}
+              options={{
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => navigationRef.current.navigate("Login")}
+                    style={{marginRight: 10}}>
+                    <Text style={{color: 'white'}}>다음</Text>
+                  </TouchableOpacity>
+                ),
+              }}
             />
           </Stack.Navigator>
         </NavigationContainer>
@@ -78,9 +117,3 @@ export default class App extends React.Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, StyleSheet, Image, Text, TextInput, View} from 'react-native';
+import {Button, StyleSheet, Image, Text, TextInput, View, TouchableOpacity} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import * as firebase from 'firebase';
 import FirebaseError from "./FirebaseError";
@@ -34,7 +34,7 @@ export default class Login extends React.Component {
                     {this.state.errorMessage}
                 </Text>}
                 <TextInput
-                    style={styles.loginInfo}
+                    style={styles.loginTopBox}
                     autoCapitalize="none"
                     placeholder="Email"
                     onChangeText={email => this.setState({ email })}
@@ -42,28 +42,33 @@ export default class Login extends React.Component {
                 />
                 <TextInput
                     secureTextEntry
-                    style={styles.loginInfo}
+                    style={styles.loginBottomBox}
                     autoCapitalize="none"
                     placeholder="Password"
                     onChangeText={password => this.setState({ password })}
                     value={this.state.password}
                 />
-                <View style={styles.loginInfo}>
+                <View style={styles.loginButton}>
                     <Button
                         title="로그인"
-                        color="gray"
+                        color="skyblue"
                         onPress={this.handleLogin}
                     >
                     </Button>
                 </View>
 
                 <View style={styles.register}>
-                    <Text style={styles.registerText}>
-                        아이디/비밀번호 찾기
-                    </Text>
-                    <Text style={styles.registerText}>
-                        회원가입
-                    </Text>
+                    <TouchableOpacity>
+                        <Text style={styles.registerText}>
+                            아이디/비밀번호 찾기
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("RegisterEmail")}>
+                        <Text style={styles.registerText}>
+                            회원가입
+                        </Text>
+                    </TouchableOpacity>
+                    
                 </View>
             </View>
         )
@@ -89,15 +94,30 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    loginInfo: {
-        height: "5%",
+    loginTopBox: {
+        height: "7%",
         width: "80%",
-        borderWidth: 1,
-        borderColor: "white",
         backgroundColor: "#cccccc",
         textAlign: "center",
-        marginBottom: 2,
-        borderRadius: 100
+        borderBottomWidth: 0.5,
+        borderColor : "grey",
+        borderTopLeftRadius : 10,
+        borderTopRightRadius : 10
+    },
+    loginBottomBox: {
+        height: "7%",
+        width: "80%",
+        backgroundColor: "#cccccc",
+        textAlign: "center",
+        borderTopWidth: 0.5,
+        borderColor : "grey",
+        borderBottomLeftRadius : 10,
+        borderBottomRightRadius : 10
+    },
+    loginButton: {
+        height: "5%",
+        width: "80%",
+        marginTop : 8,
     },
     register: {
         alignItems: "center",
