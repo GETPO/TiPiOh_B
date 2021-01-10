@@ -1,10 +1,10 @@
 import React from 'react';
 import Login from "./Login";
 import RegisterEmail from "./Register/RegisterEmail";
-import RegisterPassword from "./Register/RegisterPassword";
+import RegisterProfile from "./Register/RegisterProfile";
 import Tab from "./Tab";
 import * as Font from 'expo-font';
-import { Text, TouchableOpacity} from 'react-native';
+import { Text, TextInput, TouchableOpacity} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { navigationRef } from './RootNavigation';
@@ -91,7 +91,7 @@ export default class App extends React.Component {
               options={{
                 headerRight: () => (
                   <TouchableOpacity
-                    onPress={() => navigationRef.current.navigate("RegisterPassword")}
+                    onPress={() => navigationRef.current.navigate("RegisterProfile")}
                     style={{marginRight: 10}}>
                     <Text style={{color: 'white'}}>다음</Text>
                   </TouchableOpacity>
@@ -99,8 +99,8 @@ export default class App extends React.Component {
               }}
             />
             <Stack.Screen
-              name="RegisterPassword"
-              component={RegisterPassword}
+              name="RegisterProfile"
+              component={RegisterProfile}
               options={{
                 headerRight: () => (
                   <TouchableOpacity

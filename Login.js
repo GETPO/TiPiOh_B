@@ -1,11 +1,11 @@
 import React from 'react';
-import {Button, StyleSheet, Image, Text, TextInput, View, TouchableOpacity} from 'react-native';
+import {Button, StyleSheet, Image, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import * as firebase from 'firebase';
 import FirebaseError from "./FirebaseError";
 
 export default class Login extends React.Component {
-    state = { email: '', password: '', errorMessage: null }
+    state = { email: '', password: '', errorMessage: null };
 
     handleLogin = () => {
         const { email, password } = this.state
@@ -18,7 +18,7 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <View style={styles.box}>
+            <KeyboardAvoidingView style={styles.box} behavior='height'>
                 <Image style={styles.logo}
                        source={{uri:'https://previews.123rf.com/images/dervish37/dervish371405/dervish37140500040/28401203-%EC%8B%A0%EC%82%AC%EC%9D%98-%EC%95%84%EC%9D%B4%EC%BD%98.jpg'}}>
                 </Image>
@@ -70,7 +70,7 @@ export default class Login extends React.Component {
                     </TouchableOpacity>
                     
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -95,17 +95,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     loginTopBox: {
-        height: "7%",
+        height: 40,
         width: "80%",
         backgroundColor: "#cccccc",
         textAlign: "center",
         borderBottomWidth: 0.5,
         borderColor : "grey",
         borderTopLeftRadius : 10,
-        borderTopRightRadius : 10
+        borderTopRightRadius : 10,
     },
     loginBottomBox: {
-        height: "7%",
+        height: 40,
         width: "80%",
         backgroundColor: "#cccccc",
         textAlign: "center",
@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
         borderBottomRightRadius : 10
     },
     loginButton: {
-        height: "5%",
         width: "80%",
         marginTop : 8,
     },
