@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, TextInput} from "react-native";
 import ImageUploader from "./ImageUploader";
 
 export default class RegisterProfile extends React.Component{
-    state = { nickname: ''};
+    state = { email: this.props.route.params.email, password: this.props.route.params.password, nickname: '' }
 
     render(){
         return (
