@@ -2,6 +2,7 @@ import React from 'react';
 import Login from "./Login";
 import RegisterEmail from "./Register/RegisterEmail";
 import RegisterProfile from "./Register/RegisterProfile";
+import RegisterInfo from "./Register/RegisterInfo";
 import Tab from "./Tab";
 import * as Font from 'expo-font';
 import { Text, TextInput, TouchableOpacity} from 'react-native';
@@ -104,9 +105,22 @@ export default class App extends React.Component {
               options={{
                 headerRight: () => (
                   <TouchableOpacity
-                    onPress={() => navigationRef.current.navigate("Login")}
+                    onPress={() => navigationRef.current.navigate("RegisterInfo")}
                     style={{marginRight: 10}}>
                     <Text style={{color: 'white'}}>다음</Text>
+                  </TouchableOpacity>
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="RegisterInfo"
+              component={RegisterInfo}
+              options={{
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => navigationRef.current.navigate("Login")}
+                    style={{marginRight: 10}}>
+                    <Text style={{color: 'white'}}>완료</Text>
                   </TouchableOpacity>
                 ),
               }}

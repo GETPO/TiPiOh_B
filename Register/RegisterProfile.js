@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, Text, View, TouchableOpacity, TextInput} from "react-native";
+import {StyleSheet, Text, View, TextInput} from "react-native";
 import ImageUploader from "./ImageUploader";
 
 export default class RegisterProfile extends React.Component{
