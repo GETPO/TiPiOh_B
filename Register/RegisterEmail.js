@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity, TextInput, Button, KeyboardAvo
 import firebase from "firebase";
 import 'firebase/firestore';
 import FirebaseError from "../FirebaseError";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class RegisterEmail extends React.Component{
     state = { email: '', password: '', passwordConfirm: '', errorMessage: null }
@@ -69,19 +70,14 @@ export default class RegisterEmail extends React.Component{
                 }>
                     {this.state.errorMessage}
                 </Text>}
-                <View style={styles.button}>
-                    <Button
-                        title="다음"
-                        color="skyblue"
-                        onPress={this.handleSignUp}
-                    >
-                    </Button>
-                    <Button
-                        title="Already have an account? Login"
-                        color="skyblue"
-                        onPress={() => this.props.navigation.navigate('Login')}
-                    />
-                </View>
+                <TouchableOpacity
+                    onPress={this.handleSignUp}
+                    style={styles.nextButton}
+                >
+                    <Icon name={"chevron-right"}
+                          size={20}
+                          color="#fff" />
+                </TouchableOpacity>
             </View>
         );
     }
@@ -130,4 +126,18 @@ const styles = StyleSheet.create({
         width: "80%",
         marginTop : 30
     },
+    nextButton: {
+        borderWidth:1,
+        marginTop: 50,
+        position: 'absolute',
+        right: 50,
+        bottom: 50,
+        borderColor:'skyblue',
+        alignItems:'center',
+        justifyContent:'center',
+        width:50,
+        height:50,
+        backgroundColor: 'skyblue',
+        borderRadius:100,
+    }
 });
