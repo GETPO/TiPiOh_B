@@ -20,7 +20,7 @@ export default class Login extends React.Component {
         return (
             <KeyboardAvoidingView style={styles.box} behavior='height'>
                 <Image style={styles.logo}
-                       source={{uri:'https://previews.123rf.com/images/dervish37/dervish371405/dervish37140500040/28401203-%EC%8B%A0%EC%82%AC%EC%9D%98-%EC%95%84%EC%9D%B4%EC%BD%98.jpg'}}>
+                       source={require('./assets/logo.png')}>
                 </Image>
                 <View style={styles.symbol}>
                     <Text style={styles.symbolText}>
@@ -76,14 +76,6 @@ export default class Login extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    symbol: {
-        color: "red",
-        fontSize: 50
-    },
-    logo: {
-        width: "40%",
-        height: "40%"
-    },
     symbolText: {
         fontFamily: 'DancingScript',
         fontSize: 50,
@@ -93,6 +85,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "white"
     },
     loginTopBox: {
         height: 40,

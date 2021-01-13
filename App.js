@@ -1,5 +1,6 @@
 import React from 'react';
 import Login from "./Login";
+import Loading from "./Loading";
 import RegisterEmail from "./Register/RegisterEmail";
 import RegisterProfile from "./Register/RegisterProfile";
 import RegisterInfo from "./Register/RegisterInfo";
@@ -34,13 +35,13 @@ export default class App extends React.Component {
     await Font.loadAsync({
       'DancingScript': require('./assets/fonts/DancingScript-Bold.ttf'),
     });
-    this.setState({loading: false});
+    setTimeout(() => {this.setState({loading: false})},3000);
   }
 
   render(){
     const { loading } = this.state;
     if(loading){
-      return (<Text>Loading</Text>);
+      return (<Loading />);
     }
     else{
       return (
@@ -89,20 +90,11 @@ export default class App extends React.Component {
             <Stack.Screen
               name="RegisterEmail"
               component={RegisterEmail}
-              options={{
-                headerRight: () => (
-                  <TouchableOpacity
-                    onPress={() => navigationRef.current.navigate("RegisterProfile")}
-                    style={{marginRight: 10}}>
-                    <Text style={{color: 'white'}}>다음</Text>
-                  </TouchableOpacity>
-                ),
-              }}
             />
             <Stack.Screen
               name="RegisterProfile"
               component={RegisterProfile}
-              options={{
+              /*options={{
                 headerRight: () => (
                   <TouchableOpacity
                     onPress={() => navigationRef.current.navigate("RegisterInfo")}
@@ -110,20 +102,11 @@ export default class App extends React.Component {
                     <Text style={{color: 'white'}}>다음</Text>
                   </TouchableOpacity>
                 ),
-              }}
+              }} */
             />
             <Stack.Screen
               name="RegisterInfo"
               component={RegisterInfo}
-              options={{
-                headerRight: () => (
-                  <TouchableOpacity
-                    onPress={() => navigationRef.current.navigate("Login")}
-                    style={{marginRight: 10}}>
-                    <Text style={{color: 'white'}}>완료</Text>
-                  </TouchableOpacity>
-                ),
-              }}
             />
           </Stack.Navigator>
         </NavigationContainer>
