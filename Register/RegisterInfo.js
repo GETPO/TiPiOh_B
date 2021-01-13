@@ -1,9 +1,34 @@
 import React from "react";
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Picker} from "@react-native-picker/picker"
+import Slider from "@react-native-community/slider";
+import firebase from "firebase";
+import FirebaseError from "../FirebaseError";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class RegisterInfo extends React.Component{
-    state = { gender , age, height, body} = '';
+    state = { nickname: this.props.route.params.nickname, gender: '', age: '', height: 130, body: '', errorMessage: null}
+
+    handleInfo = () => {
+        const {nickname, gender, age, height, body} = this.state;
+        firebase
+            .firestore()
+            .collection('users')
+            .doc(nickname)
+            .set({gender: gender, age: age, height: height, body: body})
+            .then(() =>
+            {
+                if(gender == '')
+                    this.setState({errorMessage: "성별을 입력해주세요."})
+                else if(age == '')
+                    this.setState({errorMessage: "나이를 입력해주세요."})
+                else if(body == '')
+                    this.setState({errorMessage: "체형을 입력해주세요."})
+                else
+                    this.props.navigation.navigate("Login")
+            })
+            .catch(error => this.setState({ errorMessage: FirebaseError(error.code) }))
+    }
 
     render(){
         return (
@@ -16,10 +41,11 @@ export default class RegisterInfo extends React.Component{
                         this.setState({gender: itemValue})
                     }
                     mode='dropdown'
-                    dropdownIconColor="blue">
-                    <Picker.Item label="남성" value="M" />
-                    <Picker.Item label="여성" value="F" />
-                    <Picker.Item label="그외" value="N" />
+                    dropdownIconColor="#87CEEB">
+                    <Picker.Item label="-" value="" />
+                    <Picker.Item label="남성" value="남성" />
+                    <Picker.Item label="여성" value="여성" />
+                    <Picker.Item label="그외" value="그외" />
                 </Picker>
                 <Text style={styles.text}>Age</Text>
                 <Picker
@@ -29,7 +55,8 @@ export default class RegisterInfo extends React.Component{
                         this.setState({age: itemValue})
                     }
                     mode='dropdown'
-                    dropdownIconColor="blue">
+                    dropdownIconColor="#87CEEB">
+                    <Picker.Item label="-" value="" />
                     <Picker.Item label="19세 이하" value="19" />
                     <Picker.Item label="20 - 24" value="20" />
                     <Picker.Item label="25 - 29" value="25" />
@@ -38,6 +65,21 @@ export default class RegisterInfo extends React.Component{
                     <Picker.Item label="40세 이상" value="40" />
                 </Picker>
                 <Text style={styles.text}>BodyStyle</Text>
+                <Slider
+                    style={{height:50, width:140}}
+                    value={this.state.height}
+                    minimumValue={130}
+                    maximumValue={230}
+                    onValueChange={height => this.setState({height})}
+                    maximumTrackTintColor='black'
+                    minimumTrackTintColor='#87CEEB'
+                    step={1}
+                />
+                <Text
+                    style={styles.text}>
+                    {this.state.height}
+                </Text>
+
                 <Picker
                     selectedValue={this.state.body}
                     style={{height: 50, width: 100}}
@@ -45,11 +87,28 @@ export default class RegisterInfo extends React.Component{
                         this.setState({body: itemValue})
                     }
                     mode='dropdown'
-                    dropdownIconColor="blue">
+                    dropdownIconColor="#87CEEB">
+                    <Picker.Item label="-" value="" />
                     <Picker.Item label="마름" value="마름" />
                     <Picker.Item label="보통" value="보통" />
                     <Picker.Item label="건장" value="건장" />
                 </Picker>
+
+                {this.state.errorMessage &&
+                <Text style={
+                    { color: 'red' }
+                }>
+                    {this.state.errorMessage}
+                </Text>}
+
+                <TouchableOpacity
+                    onPress={this.handleInfo}
+                    style={styles.nextButton}
+                >
+                    <Icon name={"check"}
+                          size={20}
+                          color="#fff" />
+                </TouchableOpacity>
             </View>
         );
     }
@@ -62,7 +121,21 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 30,
-        marginTop: 100,
+        marginTop: 40,
         fontWeight: "700"
     },
+    nextButton: {
+        borderWidth:1,
+        marginTop: 50,
+        position: 'absolute',
+        right: 50,
+        bottom: 50,
+        borderColor:'skyblue',
+        alignItems:'center',
+        justifyContent:'center',
+        width:50,
+        height:50,
+        backgroundColor: 'skyblue',
+        borderRadius:100,
+    }
 });

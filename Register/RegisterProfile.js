@@ -30,11 +30,14 @@ export default class RegisterProfile extends React.Component{
                                 .collection('users')
                                 .doc(nickname)
                                 .set({email: email, nickname: nickname})
-                                .then(() => f.props.navigation.navigate("Login")))
+                                .then(() => f.props.navigation.navigate("RegisterInfo",
+                                    {
+                                        nickname: nickname
+                                    })))
                         .catch(error => f.setState({ errorMessage: FirebaseError(error.code) }))
                 }
                 else
-                    f.setState({ errorMessage: '닉네임이 중복됩니다.' })
+                    f.setState({ errorMessage: '이미 존재하는 닉네임입니다.' })
             })
     }
 
