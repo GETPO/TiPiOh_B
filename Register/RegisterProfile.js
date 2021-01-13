@@ -21,6 +21,7 @@ export default class RegisterProfile extends React.Component{
             {
                 if(!querySnapshot.exists)
                 {
+                    console.log("success")
                     firebase
                         .auth()
                         .createUserWithEmailAndPassword(email, password)
@@ -33,12 +34,14 @@ export default class RegisterProfile extends React.Component{
                                 .then(() => f.props.navigation.navigate("RegisterInfo",
                                     {
                                         nickname: nickname
-                                    })))
+                                    }))
+                                .catch(error => f.setState({ errorMessage: error.message})))
                         .catch(error => f.setState({ errorMessage: FirebaseError(error.code) }))
                 }
                 else
                     f.setState({ errorMessage: '이미 존재하는 닉네임입니다.' })
             })
+            .catch((error) => f.setState({errorMessage: error.message}))
     }
 
     render(){
