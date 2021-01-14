@@ -21,7 +21,6 @@ export default class RegisterProfile extends React.Component{
             {
                 if(!querySnapshot.exists)
                 {
-                    console.log("success")
                     firebase
                         .auth()
                         .createUserWithEmailAndPassword(email, password)

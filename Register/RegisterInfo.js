@@ -15,7 +15,7 @@ export default class RegisterInfo extends React.Component{
             .firestore()
             .collection('users')
             .doc(nickname)
-            .set({gender: gender, age: age, height: height, body: body})
+            .update({gender: gender, age: age, height: height, body: body})
             .then(() =>
             {
                 if(gender == '')
@@ -64,7 +64,7 @@ export default class RegisterInfo extends React.Component{
                     <Picker.Item label="35 - 39" value="35" />
                     <Picker.Item label="40세 이상" value="40" />
                 </Picker>
-                <Text style={styles.text}>BodyStyle</Text>
+                <Text style={styles.text}>Height</Text>
                 <Slider
                     style={{height:50, width:140}}
                     value={this.state.height}
@@ -76,10 +76,10 @@ export default class RegisterInfo extends React.Component{
                     step={1}
                 />
                 <Text
-                    style={styles.text}>
+                    style={styles.heightText}>
                     {this.state.height}
                 </Text>
-
+                <Text style={styles.text}>Body Style</Text>
                 <Picker
                     selectedValue={this.state.body}
                     style={{height: 50, width: 100}}
@@ -123,6 +123,10 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 30,
         marginTop: 40,
+        fontWeight: "700"
+    },
+    heightText: {
+        fontSize: 20,
         fontWeight: "700"
     },
     nextButton: {
