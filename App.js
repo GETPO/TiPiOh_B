@@ -4,6 +4,7 @@ import Loading from "./Loading";
 import RegisterEmail from "./Register/RegisterEmail";
 import RegisterProfile from "./Register/RegisterProfile";
 import RegisterInfo from "./Register/RegisterInfo";
+import WriteFeed from "./WriteFeed";
 import Tab from "./Tab";
 import * as Font from 'expo-font';
 import { Text, TextInput, TouchableOpacity} from 'react-native';
@@ -80,9 +81,9 @@ export default class App extends React.Component {
               options={{
                 headerRight: () => (
                   <TouchableOpacity
-                    onPress={() => alert('right Menu Clicked')}
+                    onPress={() => navigationRef.current.navigate("WriteFeed")}
                     style={{marginRight: 10}}>
-                    <Text style={{color: 'white'}}>right Menu</Text>
+                    <Text style={{color: 'white'}}>글쓰기</Text>
                   </TouchableOpacity>
                 ),
               }}
@@ -107,6 +108,10 @@ export default class App extends React.Component {
             <Stack.Screen
               name="RegisterInfo"
               component={RegisterInfo}
+            />
+            <Stack.Screen
+              name="WriteFeed"
+              component={WriteFeed}
             />
           </Stack.Navigator>
         </NavigationContainer>
