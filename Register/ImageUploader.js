@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Image, View, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function ImageUploader() {
+export default function ImageUploader(props) {
   const [image, setImage] = useState('https://mblogthumb-phinf.pstatic.net/MjAyMDAyMDdfMTYw/MDAxNTgxMDg1NzUxMTUy.eV1iEw2gk2wt_YqPWe5F7SroOCkXJy2KFwmTDNzM0GQg.Z3Kd5MrDh07j86Vlb2OhAtcw0oVmGCMXtTDjoHyem9og.JPEG.7wayjeju/%EB%B0%B0%EC%9A%B0%ED%94%84%EB%A1%9C%ED%95%84%EC%82%AC%EC%A7%84_IMG7117.jpg?type=w800');
 
   useEffect(() => {
@@ -22,20 +22,19 @@ export default function ImageUploader() {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
+
+    props.myCallback(result);
   };
 
   return (
     <View style={styles.container}>
-      {image && <Image source={{ uri: image }} style={styles.circle} />}
+      {image && <Image source={{ uri: image }} style={styles.circle}/> }
       <View style={styles.button}>
         <Button title="이미지 업로드" onPress={pickImage} />
       </View>
-      
     </View>
   );
 }

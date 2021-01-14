@@ -1,22 +1,42 @@
 import React from "react";
 import {StyleSheet, Text, View, Button} from "react-native";
+import firebase from "firebase";
+import {Image} from "react-native-web";
 
 export default function Profile(){
-    return (
-        <View style={styles.container}>
-            <View style={styles.top}>
-                <View style={styles.circle}></View>
-                <Text style={styles.nameText}>syeokim</Text>
-                <Text style={styles.idText}>@syeokim/MEN</Text>
-                <View style={styles.button}>
-                    <Button title="Edit Profile"/>
+    const user = firebase.auth().currentUser;
+
+    if(user)
+    {
+        if(!user.photoURL)
+        {
+            firebase.storage().ref().child("profile/" + user.displayName).getDownloadURL()
+                .then((url) => user.updateProfile({ photoURL: url.toString() }))
+        }
+
+        console.log(user.providerData);
+
+        return (
+            <View style={styles.container}>
+                <View style={styles.top}>
+                    <Text style={styles.nameText}>{user.displayName}</Text>
+                    <Text style={styles.idText}>{user.email}</Text>
+                    <View style={styles.button}>
+                        <Button title="Edit Profile"/>
+                    </View>
+                </View>
+                <View style={styles.bottom}>
+
                 </View>
             </View>
-            <View style={styles.bottom}>
+        );
+    }
+    else
+    {
+        <View>
 
-            </View>
         </View>
-    );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -56,4 +76,3 @@ const styles = StyleSheet.create({
       marginTop: 10
     }
   });
-  
