@@ -1,16 +1,18 @@
 import React from "react";
 import {StyleSheet, Text, View, Image, ScrollView, Button} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
+import firebase from "firebase";
 
 export default function Ranking({ navigation } ){
+    const user = firebase.auth().currentUser;
+
     return (
         <ScrollView style={styles.scrollView}>
             <View style={styles.container}>
                 <View style={styles.name_row}>
                     <View style={styles.left}>
                         <Image style={styles.profile} />
-                        <Text style={styles.text}>syeokim</Text>
+                        <Text style={styles.text}>{user.displayName}</Text>
                     </View>
                     <View style={styles.right}>
                         <Icon name="angle-right" size={30} color="black" />
@@ -49,7 +51,7 @@ export default function Ranking({ navigation } ){
                 <View style={styles.name_row}>
                     <View style={styles.left}>
                         <Image style={styles.profile} />
-                        <Text style={styles.text}>syeokim</Text>
+                        <Text style={styles.text}>{user.displayName}</Text>
                     </View>
                     <View style={styles.right}>
                         <Icon name="angle-right" size={30} color="black" />

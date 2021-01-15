@@ -6,7 +6,7 @@ import firebase from "firebase";
 import FirebaseError from "../FirebaseError";
 
 export default class RegisterProfile extends React.Component{
-    state = { email: this.props.route.params.email, password: this.props.route.params.password, nickname: '', errorMessage: null, image: null }
+    state = { email: this.props.route.params.email, password: this.props.route.params.password, nickname: '', errorMessage: null, image: null, photoURL: '' }
 
     handleImage = (image) => {
         this.setState({image : image})
@@ -15,9 +15,6 @@ export default class RegisterProfile extends React.Component{
     handleRegister = () => {
         const { email, password, nickname, image } = this.state
         const f = this
-        firebase
-            .storage()
-            .ref(nickname + "")
 
         firebase
             .firestore()
@@ -29,19 +26,23 @@ export default class RegisterProfile extends React.Component{
                 if(!querySnapshot.exists)
                 {
                     uploadImage(nickname, image)
-                        .then(() => createUser(email, password)
-                                .then(() => setEmailAndNickname(email, nickname)
-                                    .then(() => {
-                                        firebase.auth().currentUser.updateProfile({displayName: nickname})
-
-                                        f.props.navigation.navigate("RegisterInfo",
+                        .then(() =>
+                            firebase.storage().ref().child("profile/" + nickname).getDownloadURL()
+                                .then((url) => f.setState({ photoURL: url.toString() }))
+                                .then(() =>
+                                    createUser(email, password)
+                                        .then((user) => user.user.updateProfile(
                                             {
-                                                nickname: nickname
+                                                displayName: nickname,
+                                                photoURL: f.state.photoURL
                                             })
-                                    })
-                                    .catch(error => f.setState({ errorMessage: error.message})))
-                                .catch(error => f.setState({errorMessage: FirebaseError(message)})))
-                        .catch(error => f.setState({ errorMessage: error.message}))
+                                            .then(() => setEmailAndNickname(email, nickname)
+                                                .then(() => f.props.navigation.navigate("RegisterInfo", { nickname: nickname }))
+                                                .catch((error) => f.setState({errorMessage: error.message}))
+                                                .catch((error) => f.setState({ errorMessage: error.message})))
+                                            .catch((error) => f.setState({errorMessage: FirebaseError(error.message)})))
+                                )
+                        .catch((error) => f.setState({ errorMessage: error.message})))
                 }
                 else
                     f.setState({ errorMessage: '이미 존재하는 닉네임입니다.' })
@@ -83,6 +84,7 @@ export default class RegisterProfile extends React.Component{
 
 function createUser(email, password)
 {
+
     return firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)

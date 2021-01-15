@@ -1,24 +1,31 @@
 import React from "react";
-import {StyleSheet, Text, View, Button} from "react-native";
+import {StyleSheet, Text, View, Button, Image, TouchableOpacity} from "react-native";
 import firebase from "firebase";
-import {Image} from "react-native-web";
+import {Alert} from "react-native-web";
 
 export default function Profile(){
     const user = firebase.auth().currentUser;
 
     if(user)
     {
-        if(!user.photoURL)
-        {
-            firebase.storage().ref().child("profile/" + user.displayName).getDownloadURL()
-                .then((url) => user.updateProfile({ photoURL: url.toString() }))
-        }
-
-        console.log(user.providerData);
-
         return (
             <View style={styles.container}>
                 <View style={styles.top}>
+
+                        { !user.photoURL &&
+                        <TouchableOpacity
+                            onPress={handleImage}
+                        >
+                        <Image style={styles.circle} source={{uri: 'https://mblogthumb-phinf.pstatic.net/MjAyMDAyMDdfMTYw/MDAxNTgxMDg1NzUxMTUy.eV1iEw2gk2wt_YqPWe5F7SroOCkXJy2KFwmTDNzM0GQg.Z3Kd5MrDh07j86Vlb2OhAtcw0oVmGCMXtTDjoHyem9og.JPEG.7wayjeju/%EB%B0%B0%EC%9A%B0%ED%94%84%EB%A1%9C%ED%95%84%EC%82%AC%EC%A7%84_IMG7117.jpg?type=w800'}}/>
+                        </TouchableOpacity>}
+
+                        { user.photoURL &&
+                        <TouchableOpacity
+                            onPress={handleImage}
+                        >
+                        <Image style={styles.circle} source={{uri:user.photoURL}}/>
+                        </TouchableOpacity>}
+
                     <Text style={styles.nameText}>{user.displayName}</Text>
                     <Text style={styles.idText}>{user.email}</Text>
                     <View style={styles.button}>
@@ -31,12 +38,11 @@ export default function Profile(){
             </View>
         );
     }
-    else
-    {
-        <View>
+}
 
-        </View>
-    }
+function handleImage()
+{
+    alert("clicked!");
 }
 
 const styles = StyleSheet.create({
