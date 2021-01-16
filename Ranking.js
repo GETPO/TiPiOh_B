@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, Text, View, Image, ScrollView, Button} from "react-native";
+import {StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import firebase from "firebase";
 
@@ -11,7 +11,7 @@ export default function Ranking({ navigation } ){
             <View style={styles.container}>
                 <View style={styles.name_row}>
                     <View style={styles.left}>
-                        <Image style={styles.profile} />
+                        <Image style={styles.profile} source={{uri:user.photoURL}}/>
                         <Text style={styles.text}>{user.displayName}</Text>
                     </View>
                     <View style={styles.right}>
@@ -50,7 +50,7 @@ export default function Ranking({ navigation } ){
             <View style={styles.container}>
                 <View style={styles.name_row}>
                     <View style={styles.left}>
-                        <Image style={styles.profile} />
+                        <Image style={styles.profile} source={{uri:user.photoURL}}/>
                         <Text style={styles.text}>{user.displayName}</Text>
                     </View>
                     <View style={styles.right}>

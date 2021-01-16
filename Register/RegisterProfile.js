@@ -6,7 +6,8 @@ import firebase from "firebase";
 import FirebaseError from "../FirebaseError";
 
 export default class RegisterProfile extends React.Component{
-    state = { email: this.props.route.params.email, password: this.props.route.params.password, nickname: '', errorMessage: null, image: null, photoURL: '' }
+    state = { email: this.props.route.params.email, password: this.props.route.params.password, nickname: '', errorMessage: null, photoURL: '',
+        image: 'https://blog.kakaocdn.net/dn/cZkuHW/btqCtXev0sk/2ZmkOuDy30ANHu1WT2yrmk/img.jpg' }
 
     handleImage = (image) => {
         this.setState({image : image})
@@ -92,7 +93,7 @@ function createUser(email, password)
 
 async function uploadImage(nickname, image)
 {
-    const response = await fetch(image.uri);
+    const response = await fetch(image);
     const blob = await response.blob();
 
     return firebase
