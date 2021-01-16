@@ -1,7 +1,10 @@
 import React from "react";
-import {StyleSheet, TextInput, View, TouchableOpacity, Image, ScrollView} from "react-native";
+import {StyleSheet, TextInput, View, TouchableOpacity, Image, ImageBackground} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from 'expo-image-picker';
+import Swiper from 'react-native-swiper'
+
+const maxPicture = 3;
 
 export default class RegisterInfo extends React.Component{
     state = { title: '', time: '', place: '', ocassion: '', image: []};
@@ -17,40 +20,68 @@ export default class RegisterInfo extends React.Component{
 
     pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [3, 3],
-          quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [3, 3],
+            quality: 1,
         });
     
         if (!result.cancelled) {
-          this.setState({
-              image: [...this.state.image, result.uri]
-          });
+            if(this.state.image.length >= maxPicture){
+                alert('사진은 최대 3장까지만 가능합니다!');
+            }
+            else{
+                if(this.state.image.length === 0){
+                    let data = {
+                        key: 0,
+                        uri: result.uri,
+                    }
+                    this.setState({
+                        image: [data]
+                    });
+                }
+                else{
+                    let data = {
+                        key: this.state.image[this.state.image.length-1].key+1,
+                        uri: result.uri,
+                    }
+                    this.setState({
+                        image: [...this.state.image, data]
+                    });
+                }
+                
+            }
         }
     };
 
+    handleRemovePicture(key) {
+        let result = this.state.image.filter( (data) => data.key !== key );
+    
+        this.setState({
+            image: result,
+        });
+    }
 
     render(){
-        const selectedImages = this.state.image.map(data => {
+        const selectedImages = this.state.image.map((data, index) => {
             return (
-                <View>
-                    <Image source={{uri: data}} style={styles.picture} />
+                <View style={styles.slider} key={data.key}>
+                    <ImageBackground source={{uri: data.uri}} style={styles.picture}>
+                        <TouchableOpacity
+                            onPress={() => this.handleRemovePicture(data.key)}
+                            style={styles.cancelButton}>
+                            <Icon name={"minus-circle"}
+                                size={20}
+                                color="#fff" />
+                        </TouchableOpacity>
+                    </ImageBackground>
                 </View>
-                
             );
         });
 
         return (
             <View style={styles.container}>
-                <TextInput
-                    style={styles.title}
-                    autoCapitalize="none"
-                    placeholder="제목"
-                    onChangeText={title => this.setState({ title })}
-                    value={this.state.title}
-                />
-                <View style={styles.rowContainer}>
+                <View style={styles.tpoContainer}>
                     <TextInput
                         style={styles.tpo}
                         autoCapitalize="none"
@@ -73,21 +104,46 @@ export default class RegisterInfo extends React.Component{
                         value={this.state.ocassion}
                     />
                 </View>
-                {selectedImages}                
-                <TouchableOpacity
-                    onPress={this.pickImage}
-                    style={styles.cameraButton}>
-                    <Icon name={"camera"}
-                        size={20}
-                        color="#fff" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={this.handleSignUp}
-                    style={styles.nextButton}>
-                    <Icon name={"chevron-right"}
-                        size={20}
-                        color="#fff" />
-                </TouchableOpacity>
+                <Swiper
+                    showsButtons={true}
+                    backgroundColor='#cccccc'
+                    autoplay={true}
+                    loop={false}
+                    key={this.state.image.length}
+                    paginationStyle={{
+                        bottom : 20
+                    }}
+                >
+                    {selectedImages}
+                </Swiper>
+                <View style={styles.contentContainer}>
+                    <TextInput
+                        style={styles.content}
+                        autoCapitalize="none"
+                        placeholder="어떤 사진인가요?"
+                        onChangeText={title => this.setState({ title })}
+                        value={this.state.title}
+                        multiline={true}
+                        numberOfLines={4}
+                    />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        onPress={this.pickImage}
+                        style={styles.cameraButton}>
+                        <Icon name={"camera"}
+                            size={20}
+                            color="#fff" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={this.handleSignUp}
+                        style={styles.nextButton}>
+                        <Icon name={"chevron-right"}
+                            size={20}
+                            color="#fff" />
+                    </TouchableOpacity>
+                </View>       
+                
             </View>
         );
     }
@@ -100,35 +156,64 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "white"
     },
-    rowContainer: {
-        height: 50,
+    tpoContainer: {
+        width: '100%',
+        height: 70,
         flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "flex-end"
+        alignItems: "flex-end",
+        justifyContent: "space-around",
+        borderBottomWidth: 2,
+        borderColor: 'grey',
     },
-    title: {
-        height: 40,
+    slider: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    contentContainer:{
+        height: 230,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
+        borderColor : "grey",
+    },
+    content: {
         width: "90%",
+        fontSize: 30,
         backgroundColor: "transparent",
-        textAlign: "center",
-        borderBottomWidth: 0.5,
-        borderColor : "#cccccc",
     },
     tpo: {
-        height: 40,
-        width: "30%",
+        fontSize: 20,
+        width: 100,
         backgroundColor: "transparent",
         textAlign: "center",
-        borderBottomWidth: 0.5,
+        borderBottomWidth: 1,
         borderColor: "#cccccc",
-        margin: 5
+        margin: 10
+    },
+    buttonContainer: {
+        height: 80,
+        width: '100%',
+        flexDirection: "row",
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    cancelButton: {
+        position: 'absolute',
+        borderWidth:1,
+        borderColor:'skyblue',
+        alignItems:'center',
+        justifyContent:'center',
+        width:50,
+        height:50,
+        backgroundColor: 'skyblue',
+        borderRadius:100,
+        right : 10,
+        bottom : 10,
     },
     cameraButton: {
         borderWidth:1,
-        marginTop: 50,
-        position: 'absolute',
-        left: 50,
-        bottom: 50,
         borderColor:'skyblue',
         alignItems:'center',
         justifyContent:'center',
@@ -139,10 +224,6 @@ const styles = StyleSheet.create({
     },
     nextButton: {
         borderWidth:1,
-        marginTop: 50,
-        position: 'absolute',
-        right: 50,
-        bottom: 50,
         borderColor:'skyblue',
         alignItems:'center',
         justifyContent:'center',
@@ -152,9 +233,20 @@ const styles = StyleSheet.create({
         borderRadius:100,
     },
     picture: {
-        width: 300,
-        height: 300,
-        backgroundColor : "blue",
+        width: '100%',
+        height: '100%',
+    },
+    paginationStyle: {
+        position: 'absolute',
+        bottom: 10,
+        right: 10
+      },
+    paginationText: {
+        color: 'white',
+        fontSize: 20
+    },
+    button:{
+        color:'skyblue'
     }
     
 });

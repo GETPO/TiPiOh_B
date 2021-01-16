@@ -1,6 +1,6 @@
 import React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {Picker} from "@react-native-picker/picker"
+import {Picker} from "@react-native-community/picker"
 import Slider from "@react-native-community/slider";
 import firebase from "firebase";
 import FirebaseError from "../FirebaseError";
