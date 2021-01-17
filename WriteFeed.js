@@ -67,34 +67,36 @@ export default class RegisterInfo extends React.Component{
     handleSubmit(){
         const user = firebase.auth().currentUser,
             date = new Date(),
-            id = date.getTime().toString(),
-            images = this.state.image.map(async (data, index) => {
-                let response = await fetch(data.uri);
-                let blob = await response.blob();
-                firebase.storage().ref().child(id + '/' + index).put(blob)
-                .then(snap => {
-                    let url = snap.ref.getDownloadURL()
-                        .then(function () {
-                            console.log(url);
-                            return url;
-                          }, function () {
-                            console.log('error');
-                    });
-                });
-            });
-        
-        
+            id = date.getTime().toString();
+        let images = [];
 
-        firebase.firestore().collection("feeds").doc(id).set({
-            user: user.displayName,
-            date: date,
-            title: this.state.title,
-            time: this.state.time,
-            place: this.state.place,
-            ocassion: this.state.ocassion,
-            images: images
-        }).catch((error) => {
-            console.error("Error writing document: ", error);
+        this.state.image.forEach(async (data, index) => {
+            let response = await fetch(data.uri);
+            let blob = await response.blob();
+            await firebase.storage().ref().child('feeds/' + id + '/' + index).put(blob)
+            .then(snap => {
+                return snap.ref.getDownloadURL()
+            })
+            .then(downloadURL => {
+                images.push(downloadURL);
+            })
+            .catch(error => {
+                alert(`An error occurred while uploading the file.\n\n${error}`);
+            });
+            await firebase.firestore().collection("feeds").doc(id).set({
+                user: user.displayName,
+                date: date,
+                title: this.state.title,
+                time: this.state.time,
+                place: this.state.place,
+                ocassion: this.state.ocassion,
+                images: images
+            })
+            .then(() => {
+                this.props.navigation.goBack();
+            }).catch((error) => {
+                alert("Error writing document: ", error);
+            });
         });
     }
 
