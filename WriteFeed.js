@@ -2,7 +2,9 @@ import React from "react";
 import {StyleSheet, TextInput, View, TouchableOpacity, Image, ImageBackground} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from 'expo-image-picker';
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
+import firebase from "firebase";
+import { faRuler } from "@fortawesome/free-solid-svg-icons";
 
 const maxPicture = 3;
 
@@ -59,6 +61,40 @@ export default class RegisterInfo extends React.Component{
     
         this.setState({
             image: result,
+        });
+    }
+
+    handleSubmit(){
+        const user = firebase.auth().currentUser,
+            date = new Date(),
+            id = date.getTime().toString(),
+            images = this.state.image.map(async (data, index) => {
+                let response = await fetch(data.uri);
+                let blob = await response.blob();
+                firebase.storage().ref().child(id + '/' + index).put(blob)
+                .then(snap => {
+                    let url = snap.ref.getDownloadURL()
+                        .then(function () {
+                            console.log(url);
+                            return url;
+                          }, function () {
+                            console.log('error');
+                    });
+                });
+            });
+        
+        
+
+        firebase.firestore().collection("feeds").doc(id).set({
+            user: user.displayName,
+            date: date,
+            title: this.state.title,
+            time: this.state.time,
+            place: this.state.place,
+            ocassion: this.state.ocassion,
+            images: images
+        }).catch((error) => {
+            console.error("Error writing document: ", error);
         });
     }
 
@@ -136,7 +172,7 @@ export default class RegisterInfo extends React.Component{
                             color="#fff" />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={this.handleSignUp}
+                        onPress={this.handleSubmit.bind(this)}
                         style={styles.nextButton}>
                         <Icon name={"chevron-right"}
                             size={20}
