@@ -12,6 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { navigationRef } from './RootNavigation';
 import * as firebase from 'firebase';
+import EditProfileMenu from "./EditProfileMenu";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKaZbEYYPVrvB_IOwbFhFka3RIY3fth2U",
@@ -112,6 +113,10 @@ export default class App extends React.Component {
             <Stack.Screen
               name="WriteFeed"
               component={WriteFeed}
+            />
+            <Stack.Screen
+              name="EditProfileMenu"
+              component={EditProfileMenu}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Image, StyleSheet, Text, Modal, TouchableOpacity, View} from "react-native";
+import {Button, Image, StyleSheet, Text, Modal, TouchableOpacity, View, BackHandler} from "react-native";
 import firebase from "firebase";
 
 export default class Profile extends React.Component{
@@ -8,6 +8,10 @@ export default class Profile extends React.Component{
 
     handleImage = () => {
         this.setState({ modal: this.state.modal? false : true })
+    }
+
+    closeModal = () => {
+        this.setState({modal: false})
     }
 
     render()
@@ -23,17 +27,15 @@ export default class Profile extends React.Component{
                             onPress={this.handleImage}
                         >
                             <Image style={styles.circle} source={{uri:user.photoURL}}/>
-                            <Modal onPress={this.handleImage} visible={this.state.modal} >
-                                <TouchableOpacity onPress={this.handleImage}>
-                                    <Image style={styles.clickImage} source={{uri:user.photoURL}} resizeMode='contain'/>
-                                </TouchableOpacity>
+                            <Modal onPress={this.handleImage} onRequestClose={this.closeModal} visible={this.state.modal} >
+                                <Image style={styles.clickImage} source={{uri:user.photoURL}} resizeMode='contain'/>
                             </Modal>
                         </TouchableOpacity>
 
                         <Text style={styles.nameText}>{user.displayName}</Text>
                         <Text style={styles.idText}>{user.email}</Text>
                         <View style={styles.button}>
-                            <Button title="Edit Profile"/>
+                            <Button title="Edit Profile" onPress={() => this.props.navigation.navigate("EditProfileMenu")}/>
                         </View>
                     </View>
                     <View style={styles.bottom}>

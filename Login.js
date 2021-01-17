@@ -68,7 +68,7 @@ export default class Login extends React.Component {
                             회원가입
                         </Text>
                     </TouchableOpacity>
-                    
+
                 </View>
             </KeyboardAvoidingView>
         )
