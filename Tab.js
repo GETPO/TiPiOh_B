@@ -1,6 +1,7 @@
 import React from 'react';
 import Profile from "./Profile";
 import Timeline from "./Timeline";
+import Ranking from "./Ranking";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -9,7 +10,7 @@ const BottomTab = createBottomTabNavigator();
 export default function Tab({ navigation }) {
     return (
         <BottomTab.Navigator>
-          <BottomTab.Screen name="랭킹" component={Timeline}
+          <BottomTab.Screen name="랭킹" component={Ranking}
            options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="crown" color={color} size={size} />
           ),
