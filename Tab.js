@@ -1,6 +1,6 @@
 import React from 'react';
 import Profile from "./Profile";
-import Ranking from "./Ranking";
+import Timeline from "./Timeline";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -9,22 +9,22 @@ const BottomTab = createBottomTabNavigator();
 export default function Tab({ navigation }) {
     return (
         <BottomTab.Navigator>
-          <BottomTab.Screen name="랭킹" component={Ranking}
+          <BottomTab.Screen name="랭킹" component={Timeline}
            options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="crown" color={color} size={size} />
           ),
         }}/>
-          <BottomTab.Screen name="검색" component={Ranking}
+          <BottomTab.Screen name="검색" component={Timeline}
            options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="magnify" color={color} size={size} />
           ),
         }}/>
-          <BottomTab.Screen name="타임라인" component={Profile}
+          <BottomTab.Screen name="타임라인" component={Timeline}
            options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="timeline-clock" color={color} size={size} />
           ),
         }}/>
-          <BottomTab.Screen name="알림" component={Ranking}
+          <BottomTab.Screen name="알림" component={Timeline}
            options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
@@ -35,5 +35,5 @@ export default function Tab({ navigation }) {
           ),
         }}/>
         </BottomTab.Navigator>
-      ); 
+      );
 }
