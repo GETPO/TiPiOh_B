@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from "react";
-import {Button, FlatList, Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Button, FlatList, Image, ScrollView, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import firebase from "firebase";
+import Like from "./Like";
 
 export default function Timeline()
 {
@@ -31,6 +32,11 @@ export default function Timeline()
             style={styles.scrollView}>
         </FlatList>
     );
+}
+
+const like = () =>
+{
+    firebase.firestore().collection("feeds");
 }
 
 const renderItem = ({ item }) =>
@@ -68,9 +74,10 @@ const renderItem = ({ item }) =>
             </View>
             <View style={styles.row}>
                 <View style={styles.row}>
-                    <Button title="좋아요"/>
-                    <Text style={styles.text}>23384</Text>
+                    <Like id={item.id}/>
+                    <Text style={styles.text}>{item.like}</Text>
                 </View>
+
                 <View style={styles.row}>
                     <Button title="댓글"/>
                     <Text style={styles.text}>124</Text>

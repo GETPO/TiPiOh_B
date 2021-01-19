@@ -27,7 +27,7 @@ export default class RegisterInfo extends React.Component{
             aspect: [3, 3],
             quality: 1,
         });
-    
+
         if (!result.cancelled) {
             if(this.state.image.length >= maxPicture){
                 alert('사진은 최대 3장까지만 가능합니다!');
@@ -51,14 +51,14 @@ export default class RegisterInfo extends React.Component{
                         image: [...this.state.image, data]
                     });
                 }
-                
+
             }
         }
     };
 
     handleRemovePicture(key) {
         let result = this.state.image.filter( (data) => data.key !== key );
-    
+
         this.setState({
             image: result,
         });
@@ -84,13 +84,15 @@ export default class RegisterInfo extends React.Component{
                 alert(`An error occurred while uploading the file.\n\n${error}`);
             });
             await firebase.firestore().collection("feeds").doc(id).set({
+                id: id,
                 user: user.displayName,
                 date: date,
                 title: this.state.title,
                 time: this.state.time,
                 place: this.state.place,
                 ocassion: this.state.ocassion,
-                images: images
+                images: images,
+                like: 0
             })
             .then(() => {
                 this.props.navigation.goBack();
@@ -180,8 +182,8 @@ export default class RegisterInfo extends React.Component{
                             size={20}
                             color="#fff" />
                     </TouchableOpacity>
-                </View>       
-                
+                </View>
+
             </View>
         );
     }
@@ -286,5 +288,5 @@ const styles = StyleSheet.create({
     button:{
         color:'skyblue'
     }
-    
+
 });
